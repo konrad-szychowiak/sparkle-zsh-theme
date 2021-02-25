@@ -9,8 +9,6 @@ local host_color="%{$fg_bold[${host_type_color}]%}"
 local path_color="%{$fg_bold[blue]%}"
 local my_gray="$fg_bold[white]"
 
-
-
 # SYMBOLS
 local joiner="❯"
 local branch=""
@@ -18,34 +16,30 @@ local errored="%{$fg[red]%}✘ "
 
 # SEGMENTS
 function join {
-    local use_color
-    [[ -n $1 ]] && use_color=$1 || use_color=""
-    echo -n "%{$use_color%}%{$joiner%}"
+  local use_color
+  [[ -n $1 ]] && use_color=$1 || use_color=""
+  echo -n "%{$use_color%}%{$joiner%}"
 }
 
-user_segment() {
-    echo -n "%{$host_color%}%n@%m%{$reset_color%}"
+function user_segment {
+  echo -n "%{$host_color%}%n@%m%{$reset_color%}"
 }
 
 function path_segment {
-    echo -n " $(join $path_color) %10c%{$reset_color%}"
+  echo -n " $(join $path_color) %10c%{$reset_color%}"
 }
 
 function exit_status {
-    echo -n "%(?..$errored)"
+  echo -n "%(?..$errored)"
 }
 function su_status {
-    [[ $UID -eq 0 ]] && echo -n "%{$fg_bold[yellow]%}⚡ "
+  [[ $UID -eq 0 ]] && echo -n "%{$fg_bold[yellow]%}⚡ "
 }
 function bg_status {
-    [[ $(jobs -l | wc -l) -gt 0 ]] && echo -n "%{$fg_bold[cyan]%}⚙ "
+  [[ $(jobs -l | wc -l) -gt 0 ]] && echo -n "%{$fg_bold[cyan]%}⚙ "
 }
 function prompt_segment {
-    echo -n "$(bg_status)$(su_status)$(exit_status)$(join $host_color) %{$reset_color%}"
-}
-
-function git_segment {
-
+  echo -n "$(bg_status)$(su_status)$(exit_status)$(join $host_color) %{$reset_color%}"
 }
 
 PROMPT='
